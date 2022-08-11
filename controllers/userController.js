@@ -47,9 +47,9 @@ module.exports = {
         !user
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json({
-              user,
-              // grade: await grade(req.params.userId),
-            })
+            user,
+            // grade: await grade(req.params.userId),
+          })
       )
       .catch((err) => {
         console.log(err);
@@ -69,16 +69,16 @@ module.exports = {
         !user
           ? res.status(404).json({ message: 'No such user exists' })
           : Thought.findOneAndUpdate(
-              { username: user.username },
-              { $pull: { username: user.username } },
-              { new: true }
-            )
+            { username: user.username },
+            { $pull: { username: user.username } },
+            { new: true }
+          )
       )
       .then((thought) =>
         !thought
           ? res.status(404).json({
-              message: 'User deleted, but no thoughts found',
-            })
+            message: 'User deleted, but no thoughts found',
+          })
           : res.json({ message: 'User successfully deleted' })
       )
       .catch((err) => {
@@ -89,19 +89,21 @@ module.exports = {
 
   // update user
   updateUser(req, res) {
-    User.findOne({ _id: req.params.userId })
-      .select('-__v')
-      .then(async (user) =>
-        !user
-          ? res.status(404).json({ message: 'No user with that ID' })
-          : await user.save(req.body) //this is weird
-      )
-      .catch((err) => {
-        console.log(err);
-        return res.status(500).json(err);
-      });
+    User.findOneAndUpdate(
+      { _id: req.params.userId, },
+      { body: req.body },
+      { new: true },
+      (err, result) => {
+        if (result) {
+          res.status(200).json(result);
+          console.log(`Updated: ${result}`);
+        } else {
+          console.log('Uh Oh, something went wrong');
+          res.status(500).json({ message: 'something went wrong' });
+        }
+      }
+    )
   },
-
 }
 
   // Add an assignment to a user
