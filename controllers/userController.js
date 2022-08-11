@@ -30,7 +30,7 @@ module.exports = {
       .then(async (users) => {
         const userObj = {
           users,
-          headCount: await headCount(),
+          // headCount: await headCount(), 
         };
         return res.json(userObj);
       })
@@ -48,7 +48,7 @@ module.exports = {
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json({
               user,
-              grade: await grade(req.params.userId),
+              // grade: await grade(req.params.userId),
             })
       )
       .catch((err) => {
@@ -69,8 +69,8 @@ module.exports = {
         !user
           ? res.status(404).json({ message: 'No such user exists' })
           : Thought.findOneAndUpdate(
-              { users: req.params.userId },
-              { $pull: { users: req.params.userId } },
+              { username: user.username },
+              { $pull: { username: user.username } },
               { new: true }
             )
       )
@@ -87,38 +87,55 @@ module.exports = {
       });
   },
 
+  // update user
+  updateUser(req, res) {
+    User.findOne({ _id: req.params.userId })
+      .select('-__v')
+      .then(async (user) =>
+        !user
+          ? res.status(404).json({ message: 'No user with that ID' })
+          : await user.save(req.body) //this is weird
+      )
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
+  },
+
+}
+
   // Add an assignment to a user
-  addAssignment(req, res) {
-    console.log('You are adding an assignment');
-    console.log(req.body);
-    User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $addToSet: { assignments: req.body } },
-      { runValidators: true, new: true }
-    )
-      .then((user) =>
-        !user
-          ? res
-              .status(404)
-              .json({ message: 'No user found with that ID :(' })
-          : res.json(user)
-      )
-      .catch((err) => res.status(500).json(err));
-  },
+  // addAssignment(req, res) {
+  //   console.log('You are adding an assignment');
+  //   console.log(req.body);
+  //   User.findOneAndUpdate(
+  //     { _id: req.params.userId },
+  //     { $addToSet: { assignments: req.body } },
+  //     { runValidators: true, new: true }
+  //   )
+  //     .then((user) =>
+  //       !user
+  //         ? res
+  //             .status(404)
+  //             .json({ message: 'No user found with that ID :(' })
+  //         : res.json(user)
+  //     )
+  //     .catch((err) => res.status(500).json(err));
+  // },
   // Remove assignment from a user
-  removeAssignment(req, res) {
-    User.findOneAndUpdate(
-      { _id: req.params.userId },
-      { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
-      { runValidators: true, new: true }
-    )
-      .then((user) =>
-        !user
-          ? res
-              .status(404)
-              .json({ message: 'No user found with that ID :(' })
-          : res.json(user)
-      )
-      .catch((err) => res.status(500).json(err));
-  },
-};
+//   removeAssignment(req, res) {
+//     User.findOneAndUpdate(
+//       { _id: req.params.userId },
+//       { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
+//       { runValidators: true, new: true }
+//     )
+//       .then((user) =>
+//         !user
+//           ? res
+//               .status(404)
+//               .json({ message: 'No user found with that ID :(' })
+//           : res.json(user)
+//       )
+//       .catch((err) => res.status(500).json(err));
+//   },
+// };

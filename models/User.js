@@ -3,7 +3,7 @@ const thoughtSchema = require('./Thought');
 
 // Enable email validation 
 require('mongoose-type-email');
-mongoose.SchemaTypes.Email.defaults.message = 'Email address is invalid';
+// mongoose.SchemaTypes.Email.defaults.message = 'Email address is invalid';
 
 // Schema to create Student model
 const userSchema = new Schema(
@@ -15,7 +15,7 @@ const userSchema = new Schema(
       trimmed: true,
     },
     email: {
-      type: mongoose.SchemaTypes.Email,
+      type: String, //mongoose.SchemaTypes.Email,
       required: true,
       unique: true,
     },
