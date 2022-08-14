@@ -25,6 +25,8 @@
   ## Usage
   Once the server is running, utilize Insomnia to execute CRUD operations on localhost:3001/api/users, /api/users/userId, api/thoughts, /api/thoughts/thoughtId, and others. Please see the controllers/*Controller.js for routes.
 
+  # [Follow this for a video demo](https://drive.google.com/file/d/1NW0IM0sAkqql_H2ImXU2qrpvGNux2BPx/view)
+
   ![demo1](./assets/images/demo1.png)
 
   * * * * * *
