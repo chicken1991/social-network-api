@@ -5,6 +5,8 @@ const {
   createThought,
   updateThought,
   deleteThought,
+  createReaction,
+  deleteReaction
 } = require('../../controllers/thoughtController.js');
 
 // /api/thoughts
@@ -16,5 +18,13 @@ router
   .get(getSingleThought)
   .put(updateThought)
   .delete(deleteThought);
+
+  // Add a friend friendId to userId friends list
+// /api/users/:userId/friends/:friendId 
+router.route('/:thoughtId/reactions').post(createReaction);
+
+// delete friend 'friendId' from 'userId' friends list
+// /api/users/:userId/friends/:friendId 
+router.route('/:thoughtId/reactions/:reactionId').delete(deleteReaction);
 
 module.exports = router;

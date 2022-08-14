@@ -1,4 +1,4 @@
-const { Thought, User } = require('../models');
+const { Thought, User, Reaction } = require('../models');
 
 module.exports = {
   // Get all thoughts
@@ -53,4 +53,34 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
+  deleteReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { reactionId: req.params.reactionId } } },
+      { new: true },
+      (err, result) => {
+        if (result) {
+          res.status(200).json(result);
+          console.log(`Updated: ${result}`);
+        } else {
+          console.log('Uh Oh, something went wrong');
+          res.status(500).json({ message: 'something went wrong' });
+        }
+      }
+    )
+  },
+
+  createReaction(req, res) {
+    Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reactions: req.body } },
+      { new: true },
+      )
+      .then(() => res.json({ message: 'Reaction submitted!' })) 
+      .catch((err) => {
+        console.log(err);
+        return res.status(500).json(err);
+      });
+  },
+
 };
