@@ -1,10 +1,6 @@
 const { Schema, model } = require('mongoose');
 const thoughtSchema = require('./Thought');
 
-// Enable email validation 
-require('mongoose-type-email');
-// mongoose.SchemaTypes.Email.defaults.message = 'Email address is invalid';
-
 // Schema to create Student model
 const userSchema = new Schema(
   {
@@ -18,6 +14,7 @@ const userSchema = new Schema(
       type: String, //mongoose.SchemaTypes.Email,
       required: true,
       unique: true,
+      match: [/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, 'Not a valid email address']
     },
     thoughts: [{ 
       type: Schema.Types.ObjectId, 
