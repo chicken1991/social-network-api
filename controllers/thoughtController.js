@@ -21,12 +21,12 @@ module.exports = {
   // Create a thought
   createThought(req, res) {
     Thought.create(req.body)
-      .then((thought) => User.findOneAndUpdate(
+      .then((thought) => User.findOneAndUpdate(     //figure out how to respond with Thought stuff after adding the ID to the user thoughts array
         { _id: req.body.userId },
         { $addToSet: { thoughts: thought._id } },
         { new: true }
       ))
-      .then((thought) => res.json(thought))
+      .then(() => res.json({ message: 'Thought submitted!' })) //this currently responds with the User stuff, not thought stuff
       .catch((err) => {
         console.log(err);
         return res.status(500).json(err);
@@ -36,12 +36,7 @@ module.exports = {
   // Delete a thought
   deleteThought(req, res) {
     Thought.findOneAndDelete({ _id: req.params.thoughtId })
-      .then((thought) =>
-        !thought
-          ? res.status(404).json({ message: 'No thought with that ID' })
-          : User.deleteMany({ _id: { $in: thought.users } })
-      )
-      .then(() => res.json({ message: 'Thought and users deleted!' }))
+      .then(() => res.json({ message: 'Thought deleted!' }))
       .catch((err) => res.status(500).json(err));
   },
   // Update a thought
