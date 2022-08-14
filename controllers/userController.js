@@ -69,8 +69,8 @@ module.exports = {
   updateUser(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId, },
-      { body: req.body },
-      { new: true },
+      { $set: req.body },
+      { runValidators: true, new: true },
       (err, result) => {
         if (result) {
           res.status(200).json(result);
